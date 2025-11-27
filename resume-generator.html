@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Professional PDF Resume</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #1e40af;
+        }
+
+        button.secondary {
+            background-color: #6b7280;
+        }
+
+        button.secondary:hover {
+            background-color: #4b5563;
+        }
+
+        .instructions {
+            background-color: #eff6ff;
+            border-left: 4px solid #2563eb;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .instructions h3 {
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        #resume-preview {
+            background: white;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 4px;
+        }
+
+        .resume-content {
+            font-family: 'Calibri', 'Arial', sans-serif;
+            font-size: 11pt;
+            line-height: 1.4;
+            color: #000;
+            max-width: 8.5in;
+            margin: 0 auto;
+        }
+
+        .resume-header {
+            text-align: center;
+            border-bottom: 2px solid #2563eb;
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+        }
+
+        .resume-name {
+            font-size: 24pt;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+            color: #1f2937;
+        }
+
+        .resume-title {
+            font-size: 12pt;
+            color: #4b5563;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .resume-contact {
+            font-size: 10pt;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .resume-section {
+            margin-bottom: 16px;
+            page-break-inside: avoid;
+        }
+
+        .resume-section-title {
+            font-size: 13pt;
+            font-weight: bold;
+            color: #1f2937;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1.5px solid #d1d5db;
+            padding-bottom: 4px;
+            margin-bottom: 10px;
+        }
+
+        .resume-job {
+            margin-bottom: 14px;
+            page-break-inside: avoid;
+        }
+
+        .resume-job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 6px;
+        }
+
+        .resume-job-title {
+            font-weight: bold;
+            font-size: 11.5pt;
+            color: #1f2937;
+        }
+
+        .resume-job-company {
+            font-style: italic;
+            font-size: 10.5pt;
+            color: #4b5563;
+            margin-top: 2px;
+        }
+
+        .resume-job-date {
+            color: #6b7280;
+            font-size: 10pt;
+            white-space: nowrap;
+            margin-left: 20px;
+        }
+
+        .resume-list {
+            margin-left: 18px;
+            margin-top: 6px;
+            padding-left: 0;
+        }
+
+        .resume-list li {
+            margin-bottom: 5px;
+            line-height: 1.4;
+            color: #374151;
+        }
+
+        .resume-skills {
+            line-height: 1.6;
+        }
+
+        .resume-skill-category {
+            margin-bottom: 8px;
+        }
+
+        .resume-skill-name {
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .resume-summary {
+            text-align: justify;
+            line-height: 1.5;
+            color: #374151;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .controls, .instructions {
+                display: none;
+            }
+            #resume-preview {
+                box-shadow: none;
+                padding: 0;
+            }
+        }
+
+        @page {
+            size: letter;
+            margin: 0.5in;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <h1>Professional PDF Resume Generator</h1>
+            
+            <div class="instructions">
+                <h3>Instructions:</h3>
+                <ol>
+                    <li>Review the resume below (formatted for ATS compatibility)</li>
+                    <li>Click "Generate PDF" to download as Blessing_Omoregie_Resume.pdf</li>
+                    <li>Place the PDF file in your portfolio root directory</li>
+                    <li>Commit and push to GitHub</li>
+                </ol>
+            </div>
+
+            <div class="button-group">
+                <button onclick="generatePDF()">Generate PDF Resume</button>
+                <button class="secondary" onclick="window.print()">Print Preview</button>
+            </div>
+        </div>
+        
+        <div id="resume-preview">
+            <div class="resume-content" id="resume-content">
+                <div class="resume-header">
+                    <div class="resume-name">BLESSING OMOREGIE</div>
+                    <div class="resume-title">DevOps Engineer | Quantitative Trading Developer</div>
+                    <div class="resume-contact">
+                        Benin City, Edo State, Nigeria | +234 812 302 7408<br>
+                        omoregieblessing52@gmail.com<br>
+                        linkedin.com/in/nixie001 | github.com/nixiestone
+                    </div>
+                </div>
+
+                <div class="resume-section">
+                    <div class="resume-section-title">Professional Summary</div>
+                    <p class="resume-summary">Results-driven DevOps Engineer and Quantitative Trading Developer with proven expertise in cloud infrastructure, CI/CD automation, and algorithmic trading systems. Demonstrated ability to reduce deployment times by 40% and improve system reliability through Infrastructure as Code and real-time monitoring. Combines technical DevOps skills with quantitative finance knowledge to build systematic, data-driven trading strategies. Seeking roles in DevOps Engineering or Quantitative Trading where I can leverage dual expertise to drive operational excellence and systematic alpha generation.</p>
+                </div>
+
+                <div class="resume-section">
+                    <div class="resume-section-title">Technical Skills</div>
+                    <div class="resume-skills">
+                        <div class="resume-skill-category">
+                            <span class="resume-skill-name">DevOps & Cloud:</span> AWS (EC2, IAM, VPC, CloudFormation), Azure, Docker, Kubernetes, Terraform, Ansible, GitHub Actions, Jenkins, Prometheus, Grafana, Traefik, ELK Stack
+                        </div>
+                        <div class="resume-skill-category">
+                            <span class="resume-skill-name">Programming & Development:</span> Python, JavaScript, Bash, SQL, FastAPI, React, Flask, RESTful APIs, OpenAPI/Swagger
+                        </div>
+                        <div class="resume-skill-category">
+                            <span class="resume-skill-name">Quantitative Finance:</span> Algorithmic Trading, Machine Learning (XGBoost, scikit-learn), Technical Analysis, Risk Management, Backtesting, Strategy Development, MetaTrader 5
+                        </div>
+                        <div class="resume-skill-category">
+                            <span class="resume-skill-name">Tools & Databases:</span> Git, GitHub, Linux/Unix, PostgreSQL, MySQL, SQLite, Slack/Telegram APIs
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resume-section">
+                    <div class="resume-section-title">Professional Experience</div>
+                    
+                    <div class="resume-job">
+                        <div class="resume-job-header">
+                            <div>
+                                <div class="resume-job-title">Junior DevOps Engineer Intern</div>
+                                <div class="resume-job-company">HNG Tech</div>
+                            </div>
+                            <div class="resume-job-date">January 2025 – April 2025</div>
+                        </div>
+                        <ul class="resume-list">
+                            <li>Engineered Infrastructure as Code using Terraform and Ansible, enabling one-command deployments across development and production environments, reducing deployment complexity by 60%</li>
+                            <li>Built comprehensive CI/CD pipelines with GitHub Actions for FastAPI applications, reducing deployment time by 40% and enabling 15+ weekly deployments with zero-downtime strategies</li>
+                            <li>Deployed Prometheus and Grafana for real-time monitoring and alerting, achieving 30% reduction in deployment lead time through DORA metrics tracking and optimization</li>
+                            <li>Implemented Slack alerting system for critical infrastructure thresholds (CPU > 80%, service downtime), improving incident response time by 25%</li>
+                            <li>Containerized microservices using Docker and orchestrated with Kubernetes, improving system scalability and reliability with Traefik reverse proxy configuration</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="resume-section">
+                    <div class="resume-section-title">Key Projects</div>
+                    
+                    <div class="resume-job">
+                        <div class="resume-job-header">
+                            <div>
+                                <div class="resume-job-title">Nixie's Gold Trading Bot - Algorithmic Trading System</div>
+                                <div class="resume-job-company">Personal Project | Quantitative Trading</div>
+                            </div>
+                            <div class="resume-job-date">November 2025 – Present</div>
+                        </div>
+                        <ul class="resume-list">
+                            <li>Developed sophisticated algorithmic trading system for gold (XAU/USD) achieving 65-75% win rate in backtesting through 6-factor confluence strategy combining technical analysis, smart money concepts, and machine learning</li>
+                            <li>Implemented multi-timeframe analysis system (H4 + M15) processing 500-1000 bars per timeframe with custom technical indicators including RSI divergence detection, liquidity sweep identification, and market regime classification</li>
+                            <li>Integrated XGBoost machine learning model for signal filtering, extracting 20+ features from price and indicator data, achieving 65% ML confidence threshold for signal acceptance</li>
+                            <li>Deployed production system to AWS EC2 with 24/7 uptime, automated restart mechanisms, comprehensive logging, health monitoring, and Telegram multi-user broadcasting platform supporting unlimited subscribers</li>
+                            <li>Developed dynamic position sizing and risk management system enforcing 1-2% risk per trade with multiple take-profit levels and minimum 1.5:1 risk-reward ratio</li>
+                            <li>Technologies: Python, MetaTrader 5, XGBoost, scikit-learn, Pandas, NumPy, AWS EC2, Telegram Bot API, PostgreSQL</li>
+                        </ul>
+                    </div>
+
+                    <div class="resume-job">
+                        <div class="resume-job-header">
+                            <div>
+                                <div class="resume-job-title">FastAPI Microservices Platform</div>
+                                <div class="resume-job-company">HNG Tech | DevOps & Cloud Infrastructure</div>
+                            </div>
+                            <div class="resume-job-date">January 2025 – April 2025</div>
+                        </div>
+                        <ul class="resume-list">
+                            <li>Architected containerized microservices platform managing 15+ services across multiple environments with consistent Infrastructure as Code deployment pipelines</li>
+                            <li>Implemented automated CI/CD workflows with GitHub Actions including testing, security scanning, building, and deployment verification stages</li>
+                            <li>Configured comprehensive monitoring dashboards with Prometheus and Grafana tracking system metrics, application performance, and business KPIs</li>
+                            <li>Technologies: Docker, Kubernetes, Terraform, Ansible, GitHub Actions, Prometheus, Grafana, FastAPI, Traefik, PostgreSQL</li>
+                        </ul>
+                    </div>
+
+                    <div class="resume-job">
+                        <div class="resume-job-header">
+                            <div>
+                                <div class="resume-job-title">Professional Portfolio Website</div>
+                                <div class="resume-job-company">Personal Project | Full-Stack Development</div>
+                            </div>
+                            <div class="resume-job-date">November 2025</div>
+                        </div>
+                        <ul class="resume-list">
+                            <li>Built modern responsive portfolio with vanilla JavaScript, HTML5, and CSS3 achieving 95+ Lighthouse scores across all categories</li>
+                            <li>Implemented dark mode toggle with localStorage persistence, blog integration, and professional PDF resume download functionality</li>
+                            <li>Deployed to GitHub Pages with automatic updates on push, demonstrating proficiency in modern web development and deployment practices</li>
+                            <li>Technologies: JavaScript, HTML5, CSS3, GitHub Pages</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="resume-section">
+                    <div class="resume-section-title">Education</div>
+                    
+                    <div class="resume-job">
+                        <div class="resume-job-header">
+                            <div>
+                                <div class="resume-job-title">Bachelor of Science in Software Development</div>
+                                <div class="resume-job-company">Brigham Young University - Idaho, Rexburg, ID</div>
+                            </div>
+                            <div class="resume-job-date">September 2024 – Present</div>
+                        </div>
+                    </div>
+                    
+                    <div class="resume-job">
+                        <div class="resume-job-header">
+                            <div>
+                                <div class="resume-job-title">Bachelor of Science in Computer Science</div>
+                                <div class="resume-job-company">University of Benin, Benin City, Nigeria</div>
+                            </div>
+                            <div class="resume-job-date">September 2021 – Present</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resume-section">
+                    <div class="resume-section-title">Key Achievements</div>
+                    <ul class="resume-list">
+                        <li>Reduced deployment lead time by 30% through CI/CD pipeline optimization and implementation of DORA metrics tracking</li>
+                        <li>Enabled 15+ weekly deployments with zero-downtime deployment strategies and automated rollback mechanisms</li>
+                        <li>Improved incident response time by 25% through implementation of automated monitoring, alerting, and runbook automation</li>
+                        <li>Developed algorithmic trading system achieving 65-75% win rate in backtesting across multiple market conditions</li>
+                        <li>Built production-grade cloud infrastructure supporting 24/7 operations with comprehensive monitoring and automated recovery</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        function generatePDF() {
+            const element = document.getElementById('resume-content');
+            const opt = {
+                margin: [0.5, 0.5, 0.5, 0.5],
+                filename: 'Blessing_Omoregie_Resume.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2,
+                    useCORS: true,
+                    letterRendering: true,
+                    logging: false
+                },
+                jsPDF: { 
+                    unit: 'in', 
+                    format: 'letter', 
+                    orientation: 'portrait',
+                    compress: true
+                },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                alert('PDF Resume Generated Successfully!\n\nNext Steps:\n1. Place the downloaded PDF in your portfolio root directory\n2. Verify filename is exactly: Blessing_Omoregie_Resume.pdf\n3. Commit and push to GitHub\n4. Test download on your live site');
+            }).catch(err => {
+                console.error('Error generating PDF:', err);
+                alert('Error generating PDF. Please try again or use print-to-PDF instead.');
+            });
+        }
+    </script>
+</body>
+</html>
