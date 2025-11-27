@@ -19,6 +19,66 @@ const projects = [
         ]
     },
     {
+        title: "Gradific CI/CD & Monitoring Platform",
+        category: "DevOps & Cloud",
+        description: "Production-grade DevOps infrastructure for Gradific with automated CI/CD pipelines, comprehensive monitoring, DORA metrics tracking, and real-time alerting system achieving 99.9% uptime.",
+        tech: ["GitHub Actions", "Prometheus", "Grafana", "Nginx", "Alertmanager", "Node Exporter", "Blackbox Exporter", "Slack API"],
+        metrics: ["99.9% uptime", "40% faster deployments", "50% more frequent releases", "35% faster incident resolution"],
+        github: "https://github.com/Nixiestone/Prograde-Frontend",
+        live: null,
+        highlights: [
+            "Multi-environment CI/CD workflows (dev, staging, production)",
+            "Custom DORA metrics dashboard improving team efficiency by 30%",
+            "Real-time Slack alerting identifying 80%+ issues proactively",
+            "Vercel to self-hosted migration reducing costs by 25%"
+        ]
+    },
+    {
+        title: "Container Isolation System (Docker Alternative)",
+        category: "Systems Engineering",
+        description: "Built lightweight container-like environment from scratch using Linux namespaces, cgroups, and chroot, demonstrating deep understanding of containerization internals without Docker.",
+        tech: ["Linux Namespaces", "cgroups", "chroot", "Bash", "systemd", "seccomp"],
+        metrics: ["Process isolation", "Resource limiting", "Network isolation", "Security hardening"],
+        github: "https://github.com/Nixiestone/container-isolation-project",
+        live: null,
+        highlights: [
+            "Implemented PID, User, Network, and Mount namespaces",
+            "Configured CPU, memory, and disk I/O limits with cgroups",
+            "Created isolated filesystem with chroot/pivot_root",
+            "Applied security restrictions with seccomp and AppArmor"
+        ]
+    },
+    {
+        title: "DORA Metrics Monitoring System",
+        category: "DevOps & Observability",
+        description: "Comprehensive monitoring infrastructure tracking Deployment Frequency, Lead Time for Changes, Change Failure Rate, and Mean Time to Restore with automated alerting to Slack.",
+        tech: ["Prometheus", "Grafana", "Node Exporter", "Blackbox Exporter", "Alertmanager", "GitHub Actions", "Slack API"],
+        metrics: ["4 DORA metrics", "Real-time dashboards", "Automated alerts", "Multi-exporter setup"],
+        github: "https://github.com/Nixiestone/dora-metrics",
+        live: null,
+        highlights: [
+            "Integrated Prometheus with GitHub Actions for CI/CD metrics",
+            "Created custom Grafana dashboards for DORA visualization",
+            "Configured alerting rules for CPU, memory, and downtime",
+            "Implemented both failure and recovery alerts to Slack"
+        ]
+    },
+    {
+        title: "Dynamic Backend Deployment Platform",
+        category: "Cloud Architecture",
+        description: "Designed Kubernetes-based architecture for dynamically deploying and testing backend applications in isolated namespaces with automated testing and validation workflows.",
+        tech: ["Kubernetes", "Namespaces", "Pods", "Services", "API Gateway", "CI/CD", "PostgreSQL"],
+        metrics: ["Dynamic namespace creation", "Isolated environments", "Automated testing", "Production promotion"],
+        github: null,
+        live: null,
+        highlights: [
+            "Kubernetes namespace per deployment with app, DB, and test pods",
+            "API gateway for request routing and management",
+            "Automated testing and validation pipeline",
+            "State management for production promotion"
+        ]
+    },
+    {
         title: "FastAPI Microservices Platform",
         category: "DevOps & Cloud",
         description: "Containerized microservices architecture with CI/CD pipeline automation, reducing deployment time by 40% and enabling 15+ weekly deployments.",
@@ -49,6 +109,36 @@ const projects = [
         ]
     },
     {
+        title: "Number Classification API",
+        category: "API Development",
+        description: "RESTful API that analyzes numbers and returns mathematical properties (prime, perfect, Armstrong) along with fun facts, deployed with CORS support and comprehensive error handling.",
+        tech: ["Python", "FastAPI", "REST API", "CORS", "JSON", "Cloud Deployment"],
+        metrics: ["<500ms response", "Multiple math properties", "Fun fact integration", "Error handling"],
+        github: "https://github.com/Nixiestone/HNG-DevOps-internship",
+        live: null,
+        highlights: [
+            "Analyzes prime, perfect, and Armstrong numbers",
+            "Integrates Numbers API for fun facts",
+            "Comprehensive input validation and error handling",
+            "Deployed to publicly accessible endpoint"
+        ]
+    },
+    {
+        title: "NGINX Web Server Configuration",
+        category: "Web Server Administration",
+        description: "Deployed and configured NGINX web server on Ubuntu with custom HTML page, demonstrating fundamental DevOps skills in server setup and web server configuration.",
+        tech: ["NGINX", "Ubuntu", "HTML", "Linux", "Cloud Deployment"],
+        metrics: ["Port 80 deployment", "Custom HTML", "Public IP access", "Server administration"],
+        github: null,
+        live: null,
+        highlights: [
+            "Installed and configured NGINX on fresh Ubuntu server",
+            "Created custom HTML welcome page",
+            "Deployed to public IP address on port 80",
+            "Documented setup process in blog post"
+        ]
+    },
+    {
         title: "Professional Portfolio Website",
         category: "Frontend Development",
         description: "Modern, responsive portfolio built with vanilla JavaScript, HTML5, and CSS3, featuring dark mode, blog section, and PDF resume download functionality.",
@@ -72,21 +162,21 @@ const blogPosts = [
         date: "2025-11-27",
         readTime: "9 min read",
         excerpt: "The journey from emotional trading losses to building a systematic trading bot that removes human bias. Learn about the technical challenges, AWS deployment, and ML integration in this comprehensive guide.",
-        link: "https://medium.com/@NixieB/from-devops-to-quant-trading-how-i-built-a-gold-trading-bot-while-my-hp-probook-begged-for-mercy-a2f63b3fd4ca "
+        link: "https://medium.com/@NixieB/from-devops-to-quant-trading-how-i-built-a-gold-trading-bot-while-my-hp-probook-begged-for-mercy-a2f63b3fd4ca"
     },
     {
         title: "Deploying Prometheus & Grafana, Tracking DORA Metrics, and Setting Up Alerts: A DevOps Intern Journey at HNG Tech.",
         date: "2025-03-23",
         readTime: "10 min read",
-        excerpt: "Ever woken up to frantic messages about your website being down? Or struggled to understand why your application performance degrades after deployments?",
+        excerpt: "Ever woken up to frantic messages about your website being down? Or struggled to understand why your application performance degrades after deployments?",
         link: "https://medium.com/@NixieB/deploying-prometheus-grafana-tracking-dora-metrics-and-setting-up-alerts-6aa39fdce2cd"
     },
     {
-        title: "Building a Number Classification API: My First Python Project in DevOps",
+        title: "Building a Number Classification API: My First Python Project in DevOps",
         date: "2025-03-10",
         readTime: "1 min read",
-        excerpt: "Create an API that takes a number and returns interesting mathematical properties about it, along with a fun fact.",
-        link: "https://medium.com/@NixieB/building-a-number-classification-api-my-first-python-project-in-devops-1ed0ebde3781 "
+        excerpt: "Create an API that takes a number and returns interesting mathematical properties about it, along with a fun fact.",
+        link: "https://medium.com/@NixieB/building-a-number-classification-api-my-first-python-project-in-devops-1ed0ebde3781"
     }
 ];
 
@@ -122,6 +212,37 @@ const skills = {
     ]
 };
 
+// Experience Data
+const experiences = [
+    {
+        title: "DevOps Engineer (Contract)",
+        company: "Gradific",
+        period: "April 2025 – August 2025",
+        achievements: [
+            "Designed and implemented robust CI/CD pipelines using GitHub Actions, managing automated workflows across development, staging, and production environments, reducing deployment time by 40% and increasing deployment frequency by 50%",
+            "Established comprehensive monitoring system utilizing Grafana, Prometheus, Node Exporter, and Blackbox Exporter, achieving 99.9% system uptime",
+            "Developed custom DORA metrics application to monitor CI/CD deployments, improving team efficiency by 30% through data-driven insights",
+            "Created real-time alerting system with Prometheus and Alertmanager integrated with Slack, enabling proactive identification of 80%+ potential issues and reducing critical alert resolution time by 35%",
+            "Successfully migrated application from Vercel to self-hosted server environment, reducing hosting costs by 25%",
+            "Implemented CI/CD pipelines for Quality Assurance processes, reducing QA environment setup time by 60%",
+            "Managed server setup and configured Nginx for efficient traffic routing across multiple environments",
+            "Participated in on-call rotation ensuring 24/7 system availability and prompt resolution of critical production issues",
+            "Collaborated closely with development and QA teams to integrate automated testing into CI/CD pipelines, ensuring code quality and stability early in the development cycle"
+        ]
+    },
+    {
+        title: "DevOps Engineer Intern",
+        company: "HNG Tech",
+        period: "January 2025 – April 2025",
+        achievements: [
+            "Engineered Infrastructure as Code using Terraform and Ansible, enabling one-command deployments across dev and prod environments",
+            "Deployed Prometheus & Grafana for real-time monitoring, tracking DORA metrics and cutting deployment lead time by 30%",
+            "Built CI/CD pipelines with GitHub Actions for FastAPI applications, reducing deployment time by 40%",
+            "Implemented Slack alerting for critical thresholds (CPU > 80%), improving incident response time by 25%"
+        ]
+    }
+];
+
 // DOM Elements
 const navbar = document.getElementById('navbar');
 const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -146,7 +267,6 @@ themeToggle.addEventListener('click', () => {
 
 // PDF Resume Download Functionality
 function downloadResumePDF() {
-    // Use the pre-generated PDF file
     const link = document.createElement('a');
     link.href = 'Blessing_Omoregie_Resume.pdf';
     link.download = 'Blessing_Omoregie_Resume.pdf';
@@ -317,6 +437,29 @@ function renderSkills() {
     observeSkillBars();
 }
 
+// Render experience
+function renderExperience() {
+    const experienceContainer = document.querySelector('.experience-container');
+    if (!experienceContainer) return;
+    
+    experienceContainer.innerHTML = experiences.map(exp => `
+        <div class="experience-card">
+            <div class="experience-header">
+                <div>
+                    <h3>${exp.title}</h3>
+                    <p class="company">${exp.company}</p>
+                </div>
+                <span class="period">${exp.period}</span>
+            </div>
+            <ul class="achievements">
+                ${exp.achievements.map(achievement => `
+                    <li>${achievement}</li>
+                `).join('')}
+            </ul>
+        </div>
+    `).join('');
+}
+
 // Intersection Observer for skill bar animations
 function observeSkillBars() {
     const skillBars = document.querySelectorAll('.skill-progress');
@@ -390,6 +533,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderProjects();
     renderBlog();
     renderSkills();
+    renderExperience();
     observeElements();
     updateActiveNavLink();
 });
