@@ -1,510 +1,365 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generate Professional PDF Resume</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume — Blessing Omoregie</title>
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
+    body {
+      font-family: Arial, sans-serif;
+      background: #ede8e4;
+      padding: 28px 20px;
+      color: #111;
+    }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
+    /* ── Screen controls ───────────────────────────────── */
+    .controls {
+      max-width: 900px; margin: 0 auto 26px;
+      background: #fff; padding: 26px 30px;
+      border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,.1);
+    }
+    .controls h1 { font-family: Georgia,serif; font-size:1.25rem; color:#1a0f1e; margin-bottom:12px; }
+    .notice {
+      background:#fef5f8; border-left:4px solid #c07494;
+      padding:13px 16px; border-radius:3px; margin-bottom:18px;
+      font-size:.86rem; line-height:1.72; color:#3a2040;
+    }
+    .notice strong { color:#8c3060; }
+    .notice ol { margin:8px 0 0 18px; }
+    .btn-row { display:flex; gap:10px; flex-wrap:wrap; }
+    button {
+      padding:10px 24px; font-size:.86rem; font-weight:600;
+      border:none; border-radius:5px; cursor:pointer;
+      font-family:Arial,sans-serif; transition:opacity .18s;
+    }
+    button:hover { opacity:.84; }
+    .btn-print { background:#c07494; color:#fff; }
+    .btn-tip   { background:#6b7280; color:#fff; font-weight:400; }
 
-        .controls {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+    /* ── Page preview shell ─────────────────────────────── */
+    .page-shell {
+      max-width: 900px; margin: 0 auto;
+      background: #fff;
+      box-shadow: 0 2px 14px rgba(0,0,0,.12);
+      border-radius: 4px;
+    }
 
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-        }
+    /* ── Resume document ────────────────────────────────────
+       @page margin = 0  (declared below in @media print)
+       ALL whitespace comes from .resume padding — can never
+       be clipped by the browser's minimum margin enforcement.
+       96px top/bottom ≈ 1 in  |  108px sides ≈ 1.125 in
+    ──────────────────────────────────────────────────────── */
+    .resume {
+      width: 100%;
+      padding: 96px 108px;
+      font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.47;
+      color: #111;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
 
-        .button-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
+    /* ── Header ─────────────────────────────────────────── */
+    .rh {
+      text-align: center;
+      padding-bottom: 11px;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #c07494;
+    }
+    .rh-name { font-size:22pt; font-weight:700; color:#1a0f1e; letter-spacing:.4px; margin-bottom:3px; }
+    .rh-role { font-size:10.5pt; font-weight:600; color:#52305e; margin-bottom:7px; }
+    .rh-links { font-size:9pt; color:#52305e; line-height:1.8; }
 
-        button {
-            padding: 12px 24px;
-            font-size: 16px;
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background-color 0.3s;
-        }
+    /* Links — always underlined and coloured so they're visually obvious */
+    .rh-links a {
+      color: #8c3060;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .sep { margin:0 5px; color:#bbb; }
 
-        button:hover {
-            background-color: #1e40af;
-        }
+    /* ── Section ────────────────────────────────────────── */
+    .rs { margin-bottom:14px; page-break-inside:avoid; }
+    .rs-title {
+      font-size:10.5pt; font-weight:700; color:#1a0f1e;
+      text-transform:uppercase; letter-spacing:.65px;
+      border-bottom:1.5px solid #d8c4e2;
+      padding-bottom:3px; margin-bottom:9px;
+    }
 
-        button.secondary {
-            background-color: #6b7280;
-        }
+    /* ── Job block ──────────────────────────────────────── */
+    .rj { margin-bottom:11px; page-break-inside:avoid; }
+    .rj-row {
+      display:flex; justify-content:space-between;
+      align-items:baseline; gap:14px; margin-bottom:3px;
+    }
+    /* flex:1 1 0 + min-width:0 prevents left column overflow */
+    .rj-left  { flex:1 1 0; min-width:0; }
+    .rj-title { font-weight:700; font-size:10.5pt; color:#1a0f1e; }
+    .rj-org   { font-style:italic; font-size:10pt; color:#52305e; margin-top:1px; }
+    /* Links inside project org lines — underlined */
+    .rj-org a {
+      color: #8c3060;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      font-style: normal;
+    }
+    .rj-date  { font-size:9.5pt; color:#786080; white-space:nowrap; flex-shrink:0; }
 
-        button.secondary:hover {
-            background-color: #4b5563;
-        }
+    /* ── Lists ──────────────────────────────────────────── */
+    .rl  { margin:5px 0 0 15px; padding:0; }
+    .rl li { margin-bottom:4px; line-height:1.47; font-size:10pt; color:#1e1e1e; }
+    .ra  { margin:0 0 0 15px; padding:0; }
+    .ra li { margin-bottom:4px; font-size:10pt; line-height:1.47; color:#1e1e1e; }
 
-        .instructions {
-            background-color: #eff6ff;
-            border-left: 4px solid #2563eb;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-        }
+    /* ── Skills ─────────────────────────────────────────── */
+    .rsk-row { margin-bottom:5px; font-size:10pt; line-height:1.52; }
+    .rsk-row strong { color:#1a0f1e; }
 
-        .instructions h3 {
-            color: #1e40af;
-            margin-bottom: 10px;
-        }
+    /* ── Summary ─────────────────────────────────────────── */
+    .r-summary { font-size:10pt; line-height:1.54; color:#1e1e1e; text-align:justify; }
 
-        .instructions ol {
-            margin-left: 20px;
-            line-height: 1.8;
-        }
+    /* ── PRINT ──────────────────────────────────────────────
+       @page margin:0  means the browser adds zero extra space.
+       The .resume padding IS the margin. Links stay underlined
+       and coloured so they are visually clickable in PDF.
+    ─────────────────────────────────────────────────────── */
+    @page { size:letter; margin:0; }
 
-        #resume-preview {
-            background: white;
-            padding: 40px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-radius: 4px;
-        }
+    @media print {
+      html, body { background:#fff !important; padding:0 !important; margin:0 !important; }
+      .controls  { display:none !important; }
+      .page-shell { max-width:none; box-shadow:none; border-radius:0; }
+      .resume { padding:96px 108px; width:100%; font-size:10.5pt; line-height:1.47; }
 
-        .resume-content {
-            font-family: 'Calibri', 'Arial', sans-serif;
-            font-size: 11pt;
-            line-height: 1.4;
-            color: #000;
-            max-width: 8.5in;
-            margin: 0 auto;
-        }
-
-        .resume-header {
-            text-align: center;
-            border-bottom: 2px solid #2563eb;
-            padding-bottom: 12px;
-            margin-bottom: 18px;
-        }
-
-        .resume-name {
-            font-size: 24pt;
-            font-weight: bold;
-            letter-spacing: 1px;
-            margin-bottom: 4px;
-            color: #1f2937;
-        }
-
-        .resume-title {
-            font-size: 12pt;
-            color: #4b5563;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .resume-contact {
-            font-size: 10pt;
-            color: #6b7280;
-            line-height: 1.6;
-        }
-
-        .resume-section {
-            margin-bottom: 16px;
-            page-break-inside: avoid;
-        }
-
-        .resume-section-title {
-            font-size: 13pt;
-            font-weight: bold;
-            color: #1f2937;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 1.5px solid #d1d5db;
-            padding-bottom: 4px;
-            margin-bottom: 10px;
-        }
-
-        .resume-job {
-            margin-bottom: 14px;
-            page-break-inside: avoid;
-        }
-
-        .resume-job-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 6px;
-        }
-
-        .resume-job-title {
-            font-weight: bold;
-            font-size: 11.5pt;
-            color: #1f2937;
-        }
-
-        .resume-job-company {
-            font-style: italic;
-            font-size: 10.5pt;
-            color: #4b5563;
-            margin-top: 2px;
-        }
-
-        .resume-job-date {
-            color: #6b7280;
-            font-size: 10pt;
-            white-space: nowrap;
-            margin-left: 20px;
-        }
-
-        .resume-list {
-            margin-left: 18px;
-            margin-top: 6px;
-            padding-left: 0;
-        }
-
-        .resume-list li {
-            margin-bottom: 5px;
-            line-height: 1.4;
-            color: #374151;
-        }
-
-        .resume-skills {
-            line-height: 1.6;
-        }
-
-        .resume-skill-category {
-            margin-bottom: 8px;
-        }
-
-        .resume-skill-name {
-            font-weight: bold;
-            color: #1f2937;
-        }
-
-        .resume-summary {
-            text-align: justify;
-            line-height: 1.5;
-            color: #374151;
-        }
-
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-            .controls, .instructions {
-                display: none;
-            }
-            #resume-preview {
-                box-shadow: none;
-                padding: 0;
-            }
-        }
-
-        @page {
-            size: letter;
-            margin: 0.5in;
-        }
-    </style>
+      /* Keep links underlined and coloured in PDF */
+      a { color:#8c3060 !important; text-decoration:underline !important; text-underline-offset:2px !important; }
+      /* Stop browser from printing the raw URL after each link */
+      a[href]::after { content:none !important; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="controls">
-            <h1>Professional PDF Resume Generator</h1>
-            
-            <div class="instructions">
-                <h3>Instructions:</h3>
-                <ol>
-                    <li>Review the resume below (formatted for ATS compatibility)</li>
-                    <li>Click "Generate PDF" to download as Blessing_Omoregie_Resume.pdf</li>
-                    <li>Place the PDF file in your portfolio root directory</li>
-                    <li>Commit and push to GitHub</li>
-                </ol>
-            </div>
 
-            <div class="button-group">
-                <button onclick="generatePDF()">Generate PDF Resume</button>
-                <button class="secondary" onclick="window.print()">Print Preview</button>
-            </div>
+<div class="controls">
+  <h1>Resume — Blessing Omoregie</h1>
+  <div class="notice">
+    <strong>Save as PDF with fully clickable links:</strong>
+    <ol>
+      <li>Click <strong>Print / Save as PDF</strong> (or press Ctrl+P / Cmd+P)</li>
+      <li>Set <em>Destination</em> → <strong>Save as PDF</strong></li>
+      <li>Set <em>Margins</em> → <strong>None</strong> (this file manages its own generous 1-inch margins internally)</li>
+      <li>Save — all links (email, LinkedIn, GitHub, portfolio, Medium) are real clickable hyperlinks in the PDF.</li>
+    </ol>
+  </div>
+  <div class="btn-row">
+    <button class="btn-print" onclick="window.print()">Print / Save as PDF</button>
+    <button class="btn-tip" onclick="alert('In the print dialog:\n• Margins → None\n• Destination → Save as PDF\n\nThe file provides its own 1-inch margins.')">Tips</button>
+  </div>
+</div>
+
+<div class="page-shell">
+<div class="resume">
+
+  <!-- HEADER -->
+  <div class="rh">
+    <div class="rh-name">BLESSING OMOREGIE</div>
+    <div class="rh-role">DevOps Engineer &nbsp;&bull;&nbsp; Quantitative Trading Developer</div>
+    <div class="rh-links">
+      <a href="mailto:omoregieblessing52@gmail.com">omoregieblessing52@gmail.com</a>
+      <span class="sep">|</span>+234 812 302 7408<span class="sep">|</span>
+      <a href="https://linkedin.com/in/nixie001" target="_blank">linkedin.com/in/nixie001</a>
+      <br>
+      <a href="https://github.com/nixiestone" target="_blank">github.com/nixiestone</a>
+      <span class="sep">|</span>
+      <a href="https://nixiestone.github.io/portfolio" target="_blank">nixiestone.github.io/portfolio</a>
+      <span class="sep">|</span>
+      <a href="https://medium.com/@NixieB" target="_blank">medium.com/@NixieB</a>
+      <a href="https://nixiestone.github.io/portfolio/" target="_blank">Portfolio</a> 
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="rs">
+    <div class="rs-title">Professional Summary</div>
+    <p class="r-summary">
+      Results-driven DevOps Engineer with proven expertise in CI/CD automation, cloud infrastructure, monitoring systems, and algorithmic trading. Achieved 99.9% system uptime through comprehensive monitoring, reduced deployment times by 40%, and improved incident response by 35% through automated alerting. Currently managing production infrastructure at Gradific while developing systematic trading strategies. Combines technical DevOps excellence with quantitative finance knowledge to build reliable, data-driven systems. Seeking roles in DevOps Engineering or Quantitative Trading where dual expertise can drive operational excellence and systematic alpha generation.
+    </p>
+  </div>
+
+  <!-- SKILLS -->
+  <div class="rs">
+    <div class="rs-title">Technical Skills</div>
+    <div class="rsk-row"><strong>DevOps &amp; Cloud:</strong> AWS (EC2, IAM, VPC, CloudFormation), Azure, Docker, Kubernetes, Terraform, Ansible, GitHub Actions, Jenkins, Prometheus, Grafana, Alertmanager, Node Exporter, Blackbox Exporter, Traefik, ELK Stack, Nginx</div>
+    <div class="rsk-row"><strong>Programming &amp; Development:</strong> Python, JavaScript, Bash, SQL, FastAPI, React, Flask, RESTful APIs, OpenAPI/Swagger</div>
+    <div class="rsk-row"><strong>Quantitative Finance:</strong> Algorithmic Trading, Machine Learning (XGBoost, scikit-learn), Technical Analysis, Risk Management, Backtesting, Strategy Development, MetaTrader 5</div>
+    <div class="rsk-row"><strong>Systems Engineering:</strong> Linux Namespaces, cgroups, chroot, seccomp, AppArmor, Container Internals, System-level Isolation</div>
+    <div class="rsk-row"><strong>Tools &amp; Databases:</strong> Git, GitHub, Linux/Unix, PostgreSQL, MySQL, SQLite, Slack/Telegram APIs</div>
+  </div>
+
+  <!-- EXPERIENCE -->
+  <div class="rs">
+    <div class="rs-title">Professional Experience</div>
+
+    <div class="rj">
+      <div class="rj-row">
+        <div class="rj-left">
+          <div class="rj-title">DevOps Engineer (Contract)</div>
+          <div class="rj-org">Gradific</div>
         </div>
-        
-        <div id="resume-preview">
-            <div class="resume-content" id="resume-content">
-                <div class="resume-header">
-                    <div class="resume-name">BLESSING OMOREGIE</div>
-                    <div class="resume-title">DevOps Engineer | Quantitative Trading Developer</div>
-                    <div class="resume-contact">
-                        omoregieblessing52@gmail.com | +234 812 302 7408<br>
-                        linkedin.com/in/nixie001 | github.com/nixiestone
-                    </div>
-                </div>
-
-                <div class="resume-section">
-                    <div class="resume-section-title">Professional Summary</div>
-                    <p class="resume-summary">Results-driven DevOps Engineer with proven expertise in CI/CD automation, cloud infrastructure, monitoring systems, and algorithmic trading. Achieved 99.9% system uptime through comprehensive monitoring, reduced deployment times by 40%, and improved incident response by 35% through automated alerting. Currently managing production infrastructure at Gradific while developing systematic trading strategies. Combines technical DevOps excellence with quantitative finance knowledge to build reliable, data-driven systems. Seeking roles in DevOps Engineering or Quantitative Trading where I can leverage dual expertise to drive operational excellence and systematic alpha generation.</p>
-                </div>
-
-                <div class="resume-section">
-                    <div class="resume-section-title">Technical Skills</div>
-                    <div class="resume-skills">
-                        <div class="resume-skill-category">
-                            <span class="resume-skill-name">DevOps & Cloud:</span> AWS (EC2, IAM, VPC, CloudFormation), Azure, Docker, Kubernetes, Terraform, Ansible, GitHub Actions, Jenkins, Prometheus, Grafana, Alertmanager, Node Exporter, Blackbox Exporter, Traefik, ELK Stack, Nginx
-                        </div>
-                        <div class="resume-skill-category">
-                            <span class="resume-skill-name">Programming & Development:</span> Python, JavaScript, Bash, SQL, FastAPI, React, Flask, RESTful APIs, OpenAPI/Swagger
-                        </div>
-                        <div class="resume-skill-category">
-                            <span class="resume-skill-name">Quantitative Finance:</span> Algorithmic Trading, Machine Learning (XGBoost, scikit-learn), Technical Analysis, Risk Management, Backtesting, Strategy Development, MetaTrader 5
-                        </div>
-                        <div class="resume-skill-category">
-                            <span class="resume-skill-name">Systems Engineering:</span> Linux Namespaces, cgroups, chroot, seccomp, AppArmor, Container Internals, System-level Isolation
-                        </div>
-                        <div class="resume-skill-category">
-                            <span class="resume-skill-name">Tools & Databases:</span> Git, GitHub, Linux/Unix, PostgreSQL, MySQL, SQLite, Slack/Telegram APIs
-                        </div>
-                    </div>
-                </div>
-
-                <div class="resume-section">
-                    <div class="resume-section-title">Professional Experience</div>
-
-                    <div class="resume-job">
-                        <div class="resume-job-header">
-                            <div>
-                                <div class="resume-job-title">DevOps Engineer (Contract)</div>
-                                <div class="resume-job-company">Gradific</div>
-                            </div>
-                            <div class="resume-job-date">April 2025 – August 2025</div>
-                        </div>
-                        <ul class="resume-list">
-                            <li>Designed and implemented robust CI/CD pipelines using GitHub Actions, managing automated workflows across development, staging, and production environments, reducing deployment time by 40% and increasing deployment frequency by 50%</li>
-                            <li>Established comprehensive monitoring system utilizing Grafana, Prometheus, Node Exporter, and Blackbox Exporter, achieving 99.9% system uptime</li>
-                            <li>Developed custom DORA metrics application to monitor CI/CD deployments, improving team efficiency by 30% through data-driven insights</li>
-                            <li>Created real-time alerting system with Prometheus and Alertmanager integrated with Slack, enabling proactive identification of 80%+ potential issues and reducing critical alert resolution time by 35%</li>
-                            <li>Successfully migrated application from Vercel to self-hosted server environment, reducing hosting costs by 25%</li>
-                            <li>Implemented CI/CD pipelines for Quality Assurance processes, reducing QA environment setup time by 60%</li>
-                            <li>Managed server setup and configured Nginx for efficient traffic routing across multiple environments</li>
-                            <li>Participated in on-call rotation ensuring 24/7 system availability and prompt resolution of critical production issues</li>
-                            <li>Collaborated closely with development and QA teams to integrate automated testing into CI/CD pipelines, ensuring code quality and stability early in the development cycle</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="resume-job">
-                        <div class="resume-job-header">
-                            <div>
-                                <div class="resume-job-title">DevOps Engineer Intern</div>
-                                <div class="resume-job-company">HNG Tech</div>
-                            </div>
-                            <div class="resume-job-date">January 2025 – April 2025</div>
-                        </div>
-                        <ul class="resume-list">
-                            <li>Engineered Infrastructure as Code using Terraform and Ansible, enabling one-command deployments across development and production environments, reducing deployment complexity by 60%</li>
-                            <li>Built comprehensive CI/CD pipelines with GitHub Actions for FastAPI applications, reducing deployment time by 40% and enabling 15+ weekly deployments with zero-downtime strategies</li>
-                            <li>Deployed Prometheus and Grafana for real-time monitoring and alerting, achieving 30% reduction in deployment lead time through DORA metrics tracking and optimization</li>
-                            <li>Implemented Slack alerting system for critical infrastructure thresholds (CPU > 80%, service downtime), improving incident response time by 25%</li>
-                            <li>Containerized microservices using Docker and orchestrated with Kubernetes, improving system scalability and reliability with Traefik reverse proxy configuration</li>
-                            <li>Documented infrastructure setup and created runbooks for common operational tasks</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="resume-section">
-                    <div class="resume-section-title">Key Projects</div>
-                    
-                    <div class="resume-job">
-                        <div class="resume-job-header">
-                            <div>
-                                <div class="resume-job-title">Gradific CI/CD & Monitoring Platform</div>
-                                <div class="resume-job-company">Gradific | DevOps & Cloud Infrastructure</div>
-                            </div>
-                            <div class="resume-job-date">April 2025 – August 2025</div>
-                        </div>
-                        <ul class="resume-list">
-                            <li>Architected production-grade DevOps infrastructure managing multi-environment deployments with automated testing, building, and deployment verification</li>
-                            <li>Implemented comprehensive monitoring stack with Prometheus, Grafana, Node Exporter, and Blackbox Exporter tracking system health, application performance, and business metrics</li>
-                            <li>Developed custom DORA metrics dashboard providing real-time insights into deployment frequency, lead time, change failure rate, and mean time to restore</li>
-                            <li>Configured Alertmanager with Slack integration for proactive incident detection and resolution</li>
-                            <li>Technologies: GitHub Actions, Prometheus, Grafana, Nginx, Alertmanager, Node Exporter, Blackbox Exporter, Slack API</li>
-                        </ul>
-                    </div>
-
-                    <div class="resume-job">
-                        <div class="resume-job-header">
-                            <div>
-                                <div class="resume-job-title">Container Isolation System (Docker Alternative)</div>
-                                <div class="resume-job-company">Personal Project | Systems Engineering</div>
-                            </div>
-                            <div class="resume-job-date">December 2025</div>
-                        </div>
-                        <ul class="resume-list">
-                            <li>Built lightweight container-like environment from scratch demonstrating deep understanding of containerization internals without using Docker</li>
-                            <li>Implemented process isolation using Linux namespaces (PID, User, Network, Mount) to create separate execution contexts</li>
-                            <li>Configured resource limiting with cgroups to control CPU, memory, and disk I/O usage</li>
-                            <li>Created isolated filesystem environment using chroot/pivot_root with proper system file mounting</li>
-                            <li>Applied security hardening with seccomp and AppArmor to restrict system calls and enhance security</li>
-                            <li>Technologies: Linux Namespaces, cgroups, chroot, Bash scripting, systemd, seccomp, AppArmor</li>
-                        </ul>
-                    </div>
-
-                    <div class="resume-job">
-                        <div class="resume-job-header">
-                            <div>
-                                <div class="resume-job-title">DORA Metrics Monitoring System</div>
-                                <div class="resume-job-company">HNG Tech | DevOps & Observability</div>
-                            </div>
-                            <div class="resume-job-date">March 2025</div>
-                        </div>
-                        <ul class="resume-list">
-                            <li>Designed and deployed comprehensive monitoring infrastructure tracking key DevOps performance indicators</li>
-                            <li>Integrated Prometheus with GitHub Actions to capture CI/CD pipeline metrics and deployment data</li>
-                            <li>Created custom Grafana dashboards visualizing Deployment Frequency, Lead Time for Changes, Change Failure Rate, and Mean Time to Restore</li>
-                            <li>Configured alerting rules for critical thresholds (CPU > 80%, memory > 80%, service downtime) with automated Slack notifications</li>
-                            <li>Implemented both failure and recovery alerts enabling proactive incident management</li>
-                            <li>Technologies: Prometheus, Grafana, Node Exporter, Blackbox Exporter, Alertmanager, GitHub Actions, Slack API</li>
-                        </ul>
-                    </div>
-
-                    <div class="resume-job">
-                        <div class="resume-job-header">
-                            <div>
-                                <div class="resume-job-title">Dynamic Backend Deployment Platform</div>
-                                <div class="resume-job-company">HNG Tech | Cloud Architecture</div>
-                            </div>
-                            <div class="resume-job-date">February 2025</div>
-                        </div>
-                        <ul class="resume-list">
-                            <li>Designed Kubernetes-based architecture for dynamically deploying and testing backend applications in isolated environments</li>
-                            <li>Architected namespace-per-deployment model with dedicated pods for application, database, testing application, and testing database</li>
-                            <li>Designed API gateway for request routing and management across multiple backend deployments</li>
-                            <li>Created automated testing and validation workflow with production promotion mechanism</li>
-                            <li>Proposed comprehensive state management system for tracking deployment lifecycle</li>
-                            <li>Technologies: Kubernetes, Namespaces, Pods, Services, API Gateway, CI/CD, PostgreSQL</li>
-                        </ul>
-                    </div>
-
-                    <div class="resume-job">
-                        <div class="resume-job-header">
-                            <div>
-                                <div class="resume-job-title">Nixie's Gold Trading Bot</div>
-                                <div class="resume-job-company">Personal Project | Quantitative Trading</div>
-                            </div>
-                            <div class="resume-job-date">November 2024 – Present</div>
-                        </div>
-                        <ul class="resume-list">
-                            <li>Developed sophisticated algorithmic trading system for gold (XAU/USD) achieving 65-75% win rate in backtesting through 6-factor confluence strategy combining technical analysis, smart money concepts, and machine learning</li>
-                            <li>Implemented multi-timeframe analysis system (H4 + M15) processing 500-1000 bars per timeframe with custom technical indicators including RSI divergence detection, liquidity sweep identification, and market regime classification</li>
-                            <li>Integrated XGBoost machine learning model for signal filtering, extracting 20+ features from price and indicator data</li>
-                            <li>Deployed production system to AWS EC2 with 24/7 uptime, automated restart mechanisms, and Telegram multi-user broadcasting platform</li>
-                            <li>Technologies: Python, MetaTrader 5, XGBoost, scikit-learn, Pandas, NumPy, AWS EC2, Telegram Bot API, PostgreSQL</li>
-                        </ul>
-                    </div>
-
-                    <div class="resume-job">
-                        <div class="resume-job-header">
-                            <div>
-                                <div class="resume-job-title">FastAPI Microservices Platform</div>
-                                <div class="resume-job-company">HNG Tech | DevOps & Cloud Infrastructure</div>
-                            </div>
-                            <div class="resume-job-date">January 2025 – April 2025</div>
-                        </div>
-                        <ul class="resume-list">
-                            <li>Architected containerized microservices platform managing 15+ services across multiple environments with consistent Infrastructure as Code deployment pipelines</li>
-                            <li>Implemented automated CI/CD workflows with GitHub Actions including testing, security scanning, building, and deployment verification stages</li>
-                            <li>Technologies: Docker, Kubernetes, Terraform, Ansible, GitHub Actions, Prometheus, Grafana, FastAPI, Traefik, PostgreSQL</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="resume-section">
-                    <div class="resume-section-title">Education</div>
-                    
-                    <div class="resume-job">
-                        <div class="resume-job-header">
-                            <div>
-                                <div class="resume-job-title">Bachelor of Science in Software Development</div>
-                                <div class="resume-job-company">Brigham Young University - Idaho, Rexburg, ID</div>
-                            </div>
-                            <div class="resume-job-date">September 2024 – Present</div>
-                        </div>
-                    </div>
-                    
-                    <div class="resume-job">
-                        <div class="resume-job-header">
-                            <div>
-                                <div class="resume-job-title">Bachelor of Science in Computer Science</div>
-                                <div class="resume-job-company">University of Benin, Benin City, Nigeria</div>
-                            </div>
-                            <div class="resume-job-date">September 2021 – Present</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="resume-section">
-                    <div class="resume-section-title">Key Achievements</div>
-                    <ul class="resume-list">
-                        <li>Achieved 99.9% system uptime through comprehensive monitoring and proactive alerting at Gradific</li>
-                        <li>Reduced deployment time by 40% and increased deployment frequency by 50% through CI/CD optimization</li>
-                        <li>Improved incident response time by 35% through automated alerting and runbook automation</li>
-                        <li>Reduced hosting costs by 25% through successful cloud migration from Vercel to self-hosted environment</li>
-                        <li>Improved team efficiency by 30% through DORA metrics tracking and data-driven insights</li>
-                        <li>Reduced QA environment setup time by 60% through automated CI/CD pipelines</li>
-                        <li>Enabled proactive identification of 80%+ potential issues through real-time monitoring and alerting</li>
-                        <li>Developed algorithmic trading system achieving 65-75% win rate in backtesting</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        <div class="rj-date">April 2025 – August 2025</div>
+      </div>
+      <ul class="rl">
+        <li>Designed and implemented robust CI/CD pipelines using GitHub Actions across development, staging, and production environments, reducing deployment time by 40% and increasing deployment frequency by 50%.</li>
+        <li>Established comprehensive monitoring with Grafana, Prometheus, Node Exporter, and Blackbox Exporter, achieving 99.9% system uptime.</li>
+        <li>Developed custom DORA metrics application to monitor CI/CD deployments, improving team efficiency by 30% through data-driven insights.</li>
+        <li>Created real-time alerting with Prometheus and Alertmanager integrated with Slack, enabling proactive identification of 80%+ potential issues and reducing critical alert resolution time by 35%.</li>
+        <li>Successfully migrated application from Vercel to self-hosted server, reducing hosting costs by 25%.</li>
+        <li>Implemented CI/CD pipelines for QA processes, reducing QA environment setup time by 60%.</li>
+        <li>Managed server setup and configured Nginx for efficient traffic routing across multiple environments.</li>
+        <li>Participated in on-call rotation ensuring 24/7 system availability and prompt resolution of critical production issues.</li>
+      </ul>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script>
-        function generatePDF() {
-            const element = document.getElementById('resume-content');
-            const opt = {
-                margin: [0.5, 0.5, 0.5, 0.5],
-                filename: 'Blessing_Omoregie_Resume.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
-                    scale: 2,
-                    useCORS: true,
-                    letterRendering: true,
-                    logging: false
-                },
-                jsPDF: { 
-                    unit: 'in', 
-                    format: 'letter', 
-                    orientation: 'portrait',
-                    compress: true
-                },
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-            };
+    <div class="rj">
+      <div class="rj-row">
+        <div class="rj-left">
+          <div class="rj-title">DevOps Engineer Intern</div>
+          <div class="rj-org">HNG Tech</div>
+        </div>
+        <div class="rj-date">January 2025 – April 2025</div>
+      </div>
+      <ul class="rl">
+        <li>Engineered Infrastructure as Code using Terraform and Ansible, enabling one-command deployments and reducing deployment complexity by 60%.</li>
+        <li>Built comprehensive CI/CD pipelines with GitHub Actions for FastAPI applications, reducing deployment time by 40% and enabling 15+ weekly deployments with zero-downtime strategies.</li>
+        <li>Deployed Prometheus and Grafana for real-time monitoring, achieving a 30% reduction in deployment lead time through DORA metrics tracking.</li>
+        <li>Implemented Slack alerting for critical infrastructure thresholds, improving incident response time by 25%.</li>
+        <li>Containerised microservices using Docker and orchestrated with Kubernetes, improving scalability with Traefik reverse proxy configuration.</li>
+      </ul>
+    </div>
+  </div>
 
-            html2pdf().set(opt).from(element).save().then(() => {
-                alert('PDF Resume Generated Successfully!\n\nNext Steps:\n1. Place the downloaded PDF in your portfolio root directory\n2. Verify filename is exactly: Blessing_Omoregie_Resume.pdf\n3. Commit and push to GitHub\n4. Test download on your live site');
-            }).catch(err => {
-                console.error('Error generating PDF:', err);
-                alert('Error generating PDF. Please try again or use print-to-PDF instead.');
-            });
-        }
-    </script>
+  <!-- KEY PROJECTS -->
+  <div class="rs">
+    <div class="rs-title">Key Projects</div>
+
+    <div class="rj">
+      <div class="rj-row">
+        <div class="rj-left">
+          <div class="rj-title">Gradific CI/CD &amp; Monitoring Platform</div>
+          <div class="rj-org">DevOps &amp; Cloud Infrastructure &mdash; <a href="https://github.com/Nixiestone/Prograde-Frontend" target="_blank">github.com/Nixiestone/Prograde-Frontend</a></div>
+        </div>
+        <div class="rj-date">Apr – Aug 2025</div>
+      </div>
+      <ul class="rl">
+        <li>Architected production-grade DevOps infrastructure managing multi-environment deployments with automated testing, building, and deployment verification.</li>
+        <li>Implemented monitoring stack tracking system health and business metrics with Prometheus, Grafana, Node Exporter, and Blackbox Exporter.</li>
+        <li>Developed custom DORA metrics dashboard providing real-time insights into Deployment Frequency, Lead Time, Change Failure Rate, and MTTR.</li>
+        <li>Technologies: GitHub Actions, Prometheus, Grafana, Nginx, Alertmanager, Node Exporter, Blackbox Exporter, Slack API.</li>
+      </ul>
+    </div>
+
+    <div class="rj">
+      <div class="rj-row">
+        <div class="rj-left">
+          <div class="rj-title">Nixie's Gold Trading Bot (XAU/USD)</div>
+          <div class="rj-org">Personal Project — Quantitative Trading &mdash; <a href="https://github.com/nixiestone/nixie-gold-bot" target="_blank">github.com/nixiestone/nixie-gold-bot</a></div>
+        </div>
+        <div class="rj-date">Nov 2024 – Present</div>
+      </div>
+      <ul class="rl">
+        <li>Developed algorithmic trading system achieving 65–75% win rate in backtesting through a 6-factor confluence strategy combining technical analysis, smart money concepts, and machine learning.</li>
+        <li>Implemented multi-timeframe analysis (H4 + M15) with RSI divergence detection, liquidity sweep identification, and XGBoost signal filtering across 20+ features.</li>
+        <li>Deployed to AWS EC2 with 24/7 uptime, automated restart mechanisms, and Telegram multi-user broadcasting.</li>
+        <li>Technologies: Python, MetaTrader 5, XGBoost, scikit-learn, Pandas, NumPy, AWS EC2, Telegram Bot API, PostgreSQL.</li>
+      </ul>
+    </div>
+
+    <div class="rj">
+      <div class="rj-row">
+        <div class="rj-left">
+          <div class="rj-title">Container Isolation System</div>
+          <div class="rj-org">Personal Project — Systems Engineering &mdash; <a href="https://github.com/Nixiestone/container-isolation-project" target="_blank">github.com/Nixiestone/container-isolation-project</a></div>
+        </div>
+        <div class="rj-date">December 2025</div>
+      </div>
+      <ul class="rl">
+        <li>Built a lightweight container-like environment from scratch using Linux namespaces (PID, User, Network, Mount), cgroups, and chroot without Docker.</li>
+        <li>Applied security hardening with seccomp and AppArmor to restrict system calls and enhance process isolation.</li>
+        <li>Technologies: Linux Namespaces, cgroups, chroot, Bash scripting, systemd, seccomp, AppArmor.</li>
+      </ul>
+    </div>
+
+    <div class="rj">
+      <div class="rj-row">
+        <div class="rj-left">
+          <div class="rj-title">DORA Metrics Monitoring System</div>
+          <div class="rj-org">HNG Tech — DevOps &amp; Observability &mdash; <a href="https://github.com/Nixiestone/dora-metrics" target="_blank">github.com/Nixiestone/dora-metrics</a></div>
+        </div>
+        <div class="rj-date">March 2025</div>
+      </div>
+      <ul class="rl">
+        <li>Designed and deployed monitoring infrastructure tracking Deployment Frequency, Lead Time, Change Failure Rate, and MTTR with automated Slack alerting.</li>
+        <li>Technologies: Prometheus, Grafana, Node Exporter, Blackbox Exporter, Alertmanager, GitHub Actions, Slack API.</li>
+      </ul>
+    </div>
+
+    <div class="rj">
+      <div class="rj-row">
+        <div class="rj-left">
+          <div class="rj-title">FastAPI Microservices Platform</div>
+          <div class="rj-org">HNG Tech — DevOps &amp; Cloud &mdash; <a href="https://github.com/Nixiestone/DevOps-Stage-4" target="_blank">github.com/Nixiestone/DevOps-Stage-4</a></div>
+        </div>
+        <div class="rj-date">Jan – Apr 2025</div>
+      </div>
+      <ul class="rl">
+        <li>Architected containerised microservices platform managing 15+ services with consistent Infrastructure as Code deployment pipelines and zero-downtime deployments.</li>
+        <li>Technologies: Docker, Kubernetes, Terraform, Ansible, GitHub Actions, Prometheus, Grafana, FastAPI, Traefik, PostgreSQL.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- EDUCATION -->
+  <div class="rs">
+    <div class="rs-title">Education</div>
+    <div class="rj">
+      <div class="rj-row">
+        <div class="rj-left">
+          <div class="rj-title">Bachelor of Science in Software Development</div>
+          <div class="rj-org">Brigham Young University – Idaho, Rexburg, ID</div>
+        </div>
+        <div class="rj-date">Sep 2024 – Present</div>
+      </div>
+    </div>
+    <div class="rj">
+      <div class="rj-row">
+        <div class="rj-left">
+          <div class="rj-title">Bachelor of Science in Computer Science</div>
+          <div class="rj-org">University of Benin, Benin City, Nigeria</div>
+        </div>
+        <div class="rj-date">Sep 2021 – Present</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACHIEVEMENTS -->
+  <div class="rs">
+    <div class="rs-title">Key Achievements</div>
+    <ul class="ra">
+      <li>Achieved 99.9% system uptime through comprehensive monitoring and proactive alerting at Gradific.</li>
+      <li>Reduced deployment time by 40% and increased deployment frequency by 50% through CI/CD optimisation.</li>
+      <li>Improved incident response time by 35% through automated alerting and runbook automation.</li>
+      <li>Reduced hosting costs by 25% through successful cloud migration from Vercel to self-hosted environment.</li>
+      <li>Improved team efficiency by 30% through DORA metrics tracking and data-driven insights.</li>
+      <li>Reduced QA environment setup time by 60% through automated CI/CD pipelines.</li>
+      <li>Developed algorithmic trading system achieving 65–75% win rate in backtesting for XAU/USD.</li>
+    </ul>
+  </div>
+
+</div>
+</div>
 </body>
 </html>
