@@ -286,18 +286,323 @@ themeToggle.addEventListener('click', () => {
 });
 
 // ═══════════════════════════════════════════════════════════════
-// RESUME DOWNLOAD
+// RESUME — generated entirely in JS, no file needed in repo.
+// Opens a new tab with a fully formatted HTML resume that
+// auto-triggers the browser print dialog (Save as PDF).
+// All links are real <a> tags → clickable in the saved PDF.
 // ═══════════════════════════════════════════════════════════════
-function downloadResumePDF() {
-    const link    = document.createElement('a');
-    link.href     = 'Blessing_Omoregie_Resume.pdf';
-    link.download = 'Blessing_Omoregie_Resume.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+function openResume() {
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Blessing Omoregie — Resume</title>
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  /* @page margin:0 means .resume padding IS the margin — never clipped */
+  @page{size:letter;margin:0}
+
+  body{font-family:'Calibri','Segoe UI',Arial,sans-serif;background:#fff;color:#111}
+
+  .resume{
+    width:100%;
+    /* 0.85in top/bottom · 0.9in sides — generous, balanced breathing room */
+    padding:82px 86px;
+    font-size:10.5pt;
+    line-height:1.46;
+    overflow-wrap:break-word;
+    word-break:break-word;
+  }
+
+  /* ── Header ── */
+  .rh{text-align:center;padding-bottom:10px;margin-bottom:14px;border-bottom:2.5px solid #b06080}
+  .rh-name{font-size:22pt;font-weight:700;color:#1a0f1e;letter-spacing:.4px;margin-bottom:3px}
+  .rh-role{font-size:10.5pt;font-weight:600;color:#52305e;margin-bottom:8px}
+  .rh-row{font-size:9pt;color:#52305e;line-height:1.85;margin-bottom:2px}
+  .rh-row.portfolio-row{font-size:9.5pt;font-weight:700;color:#3a1a40;margin-bottom:2px}
+  .rh-row a{color:#8c2050;text-decoration:underline;text-underline-offset:2px;font-weight:600}
+  .sep{margin:0 5px;color:#ccc;font-weight:400}
+
+  /* ── Section ── */
+  .rs{margin-bottom:13px;page-break-inside:avoid}
+  .rs-title{
+    font-size:10.5pt;font-weight:700;color:#1a0f1e;
+    text-transform:uppercase;letter-spacing:.7px;
+    border-bottom:1.5px solid #d0b8e0;
+    padding-bottom:3px;margin-bottom:8px;
+  }
+
+  /* ── Job ── */
+  .rj{margin-bottom:11px;page-break-inside:avoid}
+  .rj-row{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:3px}
+  .rj-left{flex:1 1 0;min-width:0}
+  .rj-title{font-weight:700;font-size:10.5pt;color:#1a0f1e}
+  .rj-org{font-style:italic;font-size:10pt;color:#52305e;margin-top:1px}
+  .rj-org a{color:#8c2050;text-decoration:underline;text-underline-offset:2px;font-style:normal;font-weight:600}
+  .rj-date{font-size:9.5pt;color:#786080;white-space:nowrap;flex-shrink:0}
+
+  /* ── Lists ── */
+  .rl{margin:5px 0 0 15px;padding:0}
+  .rl li{margin-bottom:4px;line-height:1.46;font-size:10pt;color:#1e1e1e}
+  .ra{margin:0 0 0 15px;padding:0}
+  .ra li{margin-bottom:4px;font-size:10pt;line-height:1.46;color:#1e1e1e}
+
+  /* ── Skills ── */
+  .rsk{margin-bottom:5px;font-size:10pt;line-height:1.52}
+  .rsk strong{color:#1a0f1e}
+
+  /* ── Summary ── */
+  .r-sum{font-size:10pt;line-height:1.54;color:#1e1e1e;text-align:justify}
+
+  /* ── Print overrides ── */
+  @media print{
+    a{color:#8c2050!important;text-decoration:underline!important;text-underline-offset:2px!important}
+    a[href]::after{content:none!important}
+  }
+
+  /* ── Print banner (screen only) ── */
+  .print-bar{
+    background:#f9f1f5;border-bottom:2px solid #c07494;
+    padding:14px 20px;font-family:Arial,sans-serif;font-size:.9rem;
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  }
+  .print-bar strong{color:#8c3060}
+  .print-bar button{
+    padding:9px 22px;background:#c07494;color:#fff;
+    border:none;border-radius:5px;font-size:.88rem;
+    font-weight:600;cursor:pointer;font-family:Arial,sans-serif;
+  }
+  .print-bar button:hover{background:#a0607a}
+  @media print{.print-bar{display:none}}
+</style>
+</head>
+<body>
+
+<div class="print-bar">
+  <div>
+    <strong>Save as PDF:</strong> Click the button →
+    set <em>Destination</em> to <strong>Save as PDF</strong>,
+    <em>Margins</em> to <strong>None</strong>, then Save.
+    Open the PDF in Chrome or Adobe Reader for clickable links.
+  </div>
+  <button onclick="window.print()">Print / Save as PDF</button>
+</div>
+
+<div class="resume">
+
+  <div class="rh">
+    <div class="rh-name">BLESSING OMOREGIE</div>
+    <div class="rh-role">DevOps Engineer &nbsp;&bull;&nbsp; Quantitative Trading Developer</div>
+    <div class="rh-row">
+      <a href="mailto:omoregieblessing52@gmail.com">omoregieblessing52@gmail.com</a>
+      <span class="sep">|</span>+234 812 302 7408<span class="sep">|</span>
+      <a href="https://linkedin.com/in/nixie001">linkedin.com/in/nixie001</a>
+      <span class="sep">|</span>
+      <a href="https://github.com/nixiestone">github.com/nixiestone</a>
+    </div>
+    <div class="rh-row portfolio-row">
+      Portfolio: <a href="https://nixiestone.github.io/portfolio">nixiestone.github.io/portfolio</a>
+    </div>
+    <div class="rh-row">
+      Blog: <a href="https://medium.com/@NixieB">medium.com/@NixieB</a>
+    </div>
+  </div>
+
+  <div class="rs">
+    <div class="rs-title">Professional Summary</div>
+    <p class="r-sum">Results-driven DevOps Engineer with proven expertise in CI/CD automation, cloud infrastructure, monitoring systems, and algorithmic trading. Achieved 99.9% system uptime through comprehensive monitoring, reduced deployment times by 40%, and improved incident response by 35% through automated alerting. Currently managing production infrastructure at Gradific while developing systematic trading strategies. Combines technical DevOps excellence with quantitative finance knowledge to build reliable, data-driven systems. Seeking roles in DevOps Engineering or Quantitative Trading where dual expertise can drive operational excellence and systematic alpha generation.</p>
+  </div>
+
+  <div class="rs">
+    <div class="rs-title">Technical Skills</div>
+    <div class="rsk"><strong>DevOps &amp; Cloud:</strong> AWS (EC2, IAM, VPC, CloudFormation), Azure, Docker, Kubernetes, Terraform, Ansible, GitHub Actions, Jenkins, Prometheus, Grafana, Alertmanager, Node Exporter, Blackbox Exporter, Traefik, ELK Stack, Nginx</div>
+    <div class="rsk"><strong>Programming &amp; Development:</strong> Python, JavaScript, Bash, SQL, FastAPI, React, Flask, RESTful APIs, OpenAPI/Swagger</div>
+    <div class="rsk"><strong>Quantitative Finance:</strong> Algorithmic Trading, Machine Learning (XGBoost, scikit-learn), Technical Analysis, Risk Management, Backtesting, Strategy Development, MetaTrader 5</div>
+    <div class="rsk"><strong>Systems Engineering:</strong> Linux Namespaces, cgroups, chroot, seccomp, AppArmor, Container Internals, System-level Isolation</div>
+    <div class="rsk"><strong>Tools &amp; Databases:</strong> Git, GitHub, Linux/Unix, PostgreSQL, MySQL, SQLite, Slack/Telegram APIs</div>
+  </div>
+
+  <div class="rs">
+    <div class="rs-title">Professional Experience</div>
+
+    <div class="rj">
+      <div class="rj-row">
+        <div class="rj-left">
+          <div class="rj-title">DevOps Engineer (Contract)</div>
+          <div class="rj-org">Gradific</div>
+        </div>
+        <div class="rj-date">April 2025 &ndash; August 2025</div>
+      </div>
+      <ul class="rl">
+        <li>Designed and implemented robust CI/CD pipelines using GitHub Actions across development, staging, and production environments, reducing deployment time by 40% and increasing deployment frequency by 50%.</li>
+        <li>Established comprehensive monitoring with Grafana, Prometheus, Node Exporter, and Blackbox Exporter, achieving 99.9% system uptime.</li>
+        <li>Developed custom DORA metrics application to monitor CI/CD deployments, improving team efficiency by 30% through data-driven insights.</li>
+        <li>Created real-time alerting with Prometheus and Alertmanager integrated with Slack, enabling proactive identification of 80%+ potential issues and reducing critical alert resolution time by 35%.</li>
+        <li>Successfully migrated application from Vercel to self-hosted server, reducing hosting costs by 25%.</li>
+        <li>Implemented CI/CD pipelines for QA processes, reducing QA environment setup time by 60%.</li>
+        <li>Managed server setup and configured Nginx for efficient traffic routing across multiple environments.</li>
+        <li>Participated in on-call rotation ensuring 24/7 system availability and prompt resolution of critical production issues.</li>
+        <li>Collaborated with development and QA teams to integrate automated testing into CI/CD pipelines, ensuring code quality and stability early in the development cycle.</li>
+      </ul>
+    </div>
+
+    <div class="rj">
+      <div class="rj-row">
+        <div class="rj-left">
+          <div class="rj-title">DevOps Engineer Intern</div>
+          <div class="rj-org">HNG Tech</div>
+        </div>
+        <div class="rj-date">January 2025 &ndash; April 2025</div>
+      </div>
+      <ul class="rl">
+        <li>Engineered Infrastructure as Code using Terraform and Ansible, enabling one-command deployments and reducing deployment complexity by 60%.</li>
+        <li>Built comprehensive CI/CD pipelines with GitHub Actions for FastAPI applications, reducing deployment time by 40% and enabling 15+ weekly deployments with zero-downtime strategies.</li>
+        <li>Deployed Prometheus and Grafana for real-time monitoring, achieving a 30% reduction in deployment lead time through DORA metrics tracking.</li>
+        <li>Implemented Slack alerting for critical infrastructure thresholds (CPU &gt; 80%, service downtime), improving incident response time by 25%.</li>
+        <li>Containerised microservices using Docker and orchestrated with Kubernetes, improving scalability with Traefik reverse proxy configuration.</li>
+        <li>Documented infrastructure setup and created runbooks for common operational tasks.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="rs">
+    <div class="rs-title">Key Projects</div>
+
+    <div class="rj">
+      <div class="rj-row">
+        <div class="rj-left">
+          <div class="rj-title">Gradific CI/CD &amp; Monitoring Platform</div>
+          <div class="rj-org">DevOps &amp; Cloud Infrastructure &mdash; <a href="https://github.com/Nixiestone/Prograde-Frontend">github.com/Nixiestone/Prograde-Frontend</a></div>
+        </div>
+        <div class="rj-date">Apr &ndash; Aug 2025</div>
+      </div>
+      <ul class="rl">
+        <li>Architected production-grade DevOps infrastructure managing multi-environment deployments with automated testing, building, and deployment verification.</li>
+        <li>Implemented monitoring stack with Prometheus, Grafana, Node Exporter, and Blackbox Exporter tracking system health, application performance, and business metrics.</li>
+        <li>Developed custom DORA metrics dashboard providing real-time insights into Deployment Frequency, Lead Time, Change Failure Rate, and MTTR.</li>
+        <li>Technologies: GitHub Actions, Prometheus, Grafana, Nginx, Alertmanager, Node Exporter, Blackbox Exporter, Slack API.</li>
+      </ul>
+    </div>
+
+    <div class="rj">
+      <div class="rj-row">
+        <div class="rj-left">
+          <div class="rj-title">Nixie&rsquo;s Gold Trading Bot (XAU/USD)</div>
+          <div class="rj-org">Personal Project &mdash; Quantitative Trading &mdash; <a href="https://github.com/nixiestone/nixie-gold-bot">github.com/nixiestone/nixie-gold-bot</a></div>
+        </div>
+        <div class="rj-date">Nov 2024 &ndash; Present</div>
+      </div>
+      <ul class="rl">
+        <li>Developed algorithmic trading system achieving 65&ndash;75% win rate in backtesting through a 6-factor confluence strategy combining technical analysis, smart money concepts, and machine learning.</li>
+        <li>Implemented multi-timeframe analysis (H4 + M15) with RSI divergence detection, liquidity sweep identification, and XGBoost signal filtering across 20+ features.</li>
+        <li>Deployed to AWS EC2 with 24/7 uptime, automated restart mechanisms, and Telegram multi-user broadcasting.</li>
+        <li>Technologies: Python, MetaTrader 5, XGBoost, scikit-learn, Pandas, NumPy, AWS EC2, Telegram Bot API, PostgreSQL.</li>
+      </ul>
+    </div>
+
+    <div class="rj">
+      <div class="rj-row">
+        <div class="rj-left">
+          <div class="rj-title">Container Isolation System</div>
+          <div class="rj-org">Personal Project &mdash; Systems Engineering &mdash; <a href="https://github.com/Nixiestone/container-isolation-project">github.com/Nixiestone/container-isolation-project</a></div>
+        </div>
+        <div class="rj-date">December 2025</div>
+      </div>
+      <ul class="rl">
+        <li>Built a lightweight container-like environment from scratch using Linux namespaces (PID, User, Network, Mount), cgroups, and chroot without Docker.</li>
+        <li>Applied security hardening with seccomp and AppArmor to restrict system calls and enhance process isolation.</li>
+        <li>Technologies: Linux Namespaces, cgroups, chroot, Bash scripting, systemd, seccomp, AppArmor.</li>
+      </ul>
+    </div>
+
+    <div class="rj">
+      <div class="rj-row">
+        <div class="rj-left">
+          <div class="rj-title">DORA Metrics Monitoring System</div>
+          <div class="rj-org">HNG Tech &mdash; DevOps &amp; Observability &mdash; <a href="https://github.com/Nixiestone/dora-metrics">github.com/Nixiestone/dora-metrics</a></div>
+        </div>
+        <div class="rj-date">March 2025</div>
+      </div>
+      <ul class="rl">
+        <li>Designed and deployed monitoring infrastructure tracking Deployment Frequency, Lead Time, Change Failure Rate, and MTTR with automated Slack alerting.</li>
+        <li>Technologies: Prometheus, Grafana, Node Exporter, Blackbox Exporter, Alertmanager, GitHub Actions, Slack API.</li>
+      </ul>
+    </div>
+
+    <div class="rj">
+      <div class="rj-row">
+        <div class="rj-left">
+          <div class="rj-title">FastAPI Microservices Platform</div>
+          <div class="rj-org">HNG Tech &mdash; DevOps &amp; Cloud &mdash; <a href="https://github.com/Nixiestone/DevOps-Stage-4">github.com/Nixiestone/DevOps-Stage-4</a></div>
+        </div>
+        <div class="rj-date">Jan &ndash; Apr 2025</div>
+      </div>
+      <ul class="rl">
+        <li>Architected containerised microservices platform managing 15+ services with consistent Infrastructure as Code deployment pipelines and zero-downtime deployments.</li>
+        <li>Technologies: Docker, Kubernetes, Terraform, Ansible, GitHub Actions, Prometheus, Grafana, FastAPI, Traefik, PostgreSQL.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="rs">
+    <div class="rs-title">Education</div>
+    <div class="rj">
+      <div class="rj-row">
+        <div class="rj-left">
+          <div class="rj-title">Bachelor of Science in Software Development</div>
+          <div class="rj-org">Brigham Young University &ndash; Idaho, Rexburg, ID</div>
+        </div>
+        <div class="rj-date">Sep 2024 &ndash; Present</div>
+      </div>
+    </div>
+    <div class="rj">
+      <div class="rj-row">
+        <div class="rj-left">
+          <div class="rj-title">Bachelor of Science in Computer Science</div>
+          <div class="rj-org">University of Benin, Benin City, Nigeria</div>
+        </div>
+        <div class="rj-date">Sep 2021 &ndash; Present</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rs">
+    <div class="rs-title">Key Achievements</div>
+    <ul class="ra">
+      <li>Achieved 99.9% system uptime through comprehensive monitoring and proactive alerting at Gradific.</li>
+      <li>Reduced deployment time by 40% and increased deployment frequency by 50% through CI/CD optimisation.</li>
+      <li>Improved incident response time by 35% through automated alerting and runbook automation.</li>
+      <li>Reduced hosting costs by 25% through successful cloud migration from Vercel to self-hosted environment.</li>
+      <li>Improved team efficiency by 30% through DORA metrics tracking and data-driven insights.</li>
+      <li>Reduced QA environment setup time by 60% through automated CI/CD pipelines.</li>
+      <li>Developed algorithmic trading system achieving 65&ndash;75% win rate in backtesting for XAU/USD.</li>
+    </ul>
+  </div>
+
+</div>
+<script>
+  // Auto-open print dialog after a short delay so the page renders first
+  window.addEventListener('load', () => {
+    setTimeout(() => window.print(), 500);
+  });
+</script>
+</body>
+</html>`;
+
+    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    const tab  = window.open(url, '_blank');
+
+    // Clean up the blob URL after the tab has loaded
+    if (tab) {
+        tab.addEventListener('load', () => {
+            setTimeout(() => URL.revokeObjectURL(url), 2000);
+        });
+    }
 }
-document.getElementById('resume-download-nav').addEventListener('click', e => { e.preventDefault(); downloadResumePDF(); });
-document.getElementById('resume-download-hero').addEventListener('click', e => { e.preventDefault(); downloadResumePDF(); });
+
+document.getElementById('resume-download-nav').addEventListener('click', e => { e.preventDefault(); openResume(); });
+document.getElementById('resume-download-hero').addEventListener('click', e => { e.preventDefault(); openResume(); });
 
 // ═══════════════════════════════════════════════════════════════
 // NAVBAR SCROLL
