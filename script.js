@@ -398,19 +398,24 @@ function initParticles() {
 
     function draw() {
         ctx.clearRect(0, 0, W, H);
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        // Particles need higher opacity on light ivory bg to be visible
+        const maxAlpha = isLight ? 0.82 : 0.55;
         particles.forEach(p => {
             p.life++;
             if (p.life > p.maxLife) p.reset();
 
             const progress = p.life / p.maxLife;
-            // Fade in first 15%, stay bright, fade out last 20%
             const alpha = progress < 0.15 ? progress / 0.15
                         : progress > 0.80 ? (1 - progress) / 0.20
                         : 1;
 
+            // Larger radius in light mode for visibility
+            const r = isLight ? p.r * 1.8 : p.r;
+
             ctx.beginPath();
-            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-            ctx.fillStyle = p.col + (alpha * 0.55) + ')';
+            ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+            ctx.fillStyle = p.col + (alpha * maxAlpha) + ')';
             ctx.fill();
 
             p.x += p.vx;
@@ -487,23 +492,37 @@ function initParallax() {
 }
 
 // ═══════════════════════════════════════════════════════════════
-// SECTION TITLE REVEAL
+// SECTION TITLE REVEAL — triggers even if already in viewport
 // ═══════════════════════════════════════════════════════════════
 function initTitleReveals() {
     const targets = document.querySelectorAll('.section-title, .section-subtitle, .section-title-accent');
+
+    // Use rootMargin to catch elements already visible on load
     const io = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('in-view');
+                // Small delay so CSS transition has something to animate from
+                setTimeout(() => entry.target.classList.add('in-view'), 60);
                 io.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.2 });
-    targets.forEach(el => io.observe(el));
+    }, { threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
+
+    targets.forEach(el => {
+        // If element is already visible on load (above fold), trigger after a paint
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+            requestAnimationFrame(() => {
+                setTimeout(() => el.classList.add('in-view'), 100);
+            });
+        } else {
+            io.observe(el);
+        }
+    });
 }
 
 // ═══════════════════════════════════════════════════════════════
-// HIGHLIGHT ITEMS REVEAL
+// HIGHLIGHT ITEMS REVEAL — both themes
 // ═══════════════════════════════════════════════════════════════
 function initHighlightReveals() {
     const items = document.querySelectorAll('.highlight-item');
@@ -514,7 +533,7 @@ function initHighlightReveals() {
                 io.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.15 });
+    }, { threshold: 0.1, rootMargin: '0px 0px -10px 0px' });
     items.forEach(el => io.observe(el));
 }
 

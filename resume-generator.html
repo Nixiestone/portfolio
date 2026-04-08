@@ -14,7 +14,7 @@
       color: #111;
     }
 
-    /* ── Screen controls ───────────────────────────────── */
+    /* ── Screen controls (hidden on print) ─────────────── */
     .controls {
       max-width: 900px; margin: 0 auto 26px;
       background: #fff; padding: 26px 30px;
@@ -28,7 +28,7 @@
     }
     .notice strong { color:#8c3060; }
     .notice ol { margin:8px 0 0 18px; }
-    .btn-row { display:flex; gap:10px; flex-wrap:wrap; }
+    .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:4px; }
     button {
       padding:10px 24px; font-size:.86rem; font-weight:600;
       border:none; border-radius:5px; cursor:pointer;
@@ -46,15 +46,16 @@
       border-radius: 4px;
     }
 
-    /* ── Resume document ────────────────────────────────────
-       @page margin = 0  (declared below in @media print)
-       ALL whitespace comes from .resume padding — can never
-       be clipped by the browser's minimum margin enforcement.
-       96px top/bottom ≈ 1 in  |  108px sides ≈ 1.125 in
-    ──────────────────────────────────────────────────────── */
+    /* ════════════════════════════════════════════════════════
+       RESUME DOCUMENT
+       @page margin = 0  →  .resume padding IS the margin.
+       This is the only approach that survives browser minimum
+       margin enforcement without clipping content.
+       padding: 88px 100px  ≈  0.92in top/bottom, 1.04in sides
+    ════════════════════════════════════════════════════════ */
     .resume {
       width: 100%;
-      padding: 96px 108px;
+      padding: 88px 100px;
       font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
       font-size: 10.5pt;
       line-height: 1.47;
@@ -66,102 +67,138 @@
     /* ── Header ─────────────────────────────────────────── */
     .rh {
       text-align: center;
-      padding-bottom: 11px;
-      margin-bottom: 15px;
-      border-bottom: 2px solid #c07494;
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+      border-bottom: 2px solid #b06080;
     }
-    .rh-name { font-size:22pt; font-weight:700; color:#1a0f1e; letter-spacing:.4px; margin-bottom:3px; }
-    .rh-role { font-size:10.5pt; font-weight:600; color:#52305e; margin-bottom:7px; }
-    .rh-links { font-size:9pt; color:#52305e; line-height:1.8; }
+    .rh-name {
+      font-size: 22pt; font-weight: 700;
+      color: #1a0f1e; letter-spacing: .4px; margin-bottom: 3px;
+    }
+    .rh-role {
+      font-size: 10.5pt; font-weight: 600;
+      color: #52305e; margin-bottom: 9px;
+    }
 
-    /* Links — always underlined and coloured so they're visually obvious */
-    .rh-links a {
-      color: #8c3060;
+    /* Contact row 1 */
+    .rh-contacts {
+      font-size: 9pt; color: #52305e;
+      line-height: 1.85; margin-bottom: 3px;
+    }
+    /* Portfolio line — its own row, slightly bolder */
+    .rh-portfolio {
+      font-size: 9pt; font-weight: 600;
+      color: #52305e; margin-bottom: 2px;
+    }
+    /* Blog line */
+    .rh-blog {
+      font-size: 9pt; color: #52305e;
+    }
+
+    /*
+      CRITICAL FOR PDF CLICKABILITY:
+      • No target="_blank" on any link — PDF engines often strip
+        link annotations when target="_blank" is present.
+      • text-decoration:underline makes links visually obvious.
+      • color contrasts clearly against the cream background.
+    */
+    .rh-contacts a,
+    .rh-portfolio a,
+    .rh-blog a {
+      color: #8c2050;
       text-decoration: underline;
       text-underline-offset: 2px;
+      font-weight: 600;
     }
-    .sep { margin:0 5px; color:#bbb; }
+
+    .sep { margin: 0 6px; color: #bbb; font-weight: 400; }
 
     /* ── Section ────────────────────────────────────────── */
-    .rs { margin-bottom:14px; page-break-inside:avoid; }
+    .rs { margin-bottom: 13px; page-break-inside: avoid; }
     .rs-title {
-      font-size:10.5pt; font-weight:700; color:#1a0f1e;
-      text-transform:uppercase; letter-spacing:.65px;
-      border-bottom:1.5px solid #d8c4e2;
-      padding-bottom:3px; margin-bottom:9px;
+      font-size: 10.5pt; font-weight: 700; color: #1a0f1e;
+      text-transform: uppercase; letter-spacing: .7px;
+      border-bottom: 1.5px solid #d0b8e0;
+      padding-bottom: 3px; margin-bottom: 8px;
     }
 
     /* ── Job block ──────────────────────────────────────── */
-    .rj { margin-bottom:11px; page-break-inside:avoid; }
+    .rj { margin-bottom: 11px; page-break-inside: avoid; }
     .rj-row {
-      display:flex; justify-content:space-between;
-      align-items:baseline; gap:14px; margin-bottom:3px;
+      display: flex; justify-content: space-between;
+      align-items: baseline; gap: 14px; margin-bottom: 3px;
     }
-    /* flex:1 1 0 + min-width:0 prevents left column overflow */
-    .rj-left  { flex:1 1 0; min-width:0; }
-    .rj-title { font-weight:700; font-size:10.5pt; color:#1a0f1e; }
-    .rj-org   { font-style:italic; font-size:10pt; color:#52305e; margin-top:1px; }
-    /* Links inside project org lines — underlined */
+    .rj-left  { flex: 1 1 0; min-width: 0; }
+    .rj-title { font-weight: 700; font-size: 10.5pt; color: #1a0f1e; }
+    .rj-org   { font-style: italic; font-size: 10pt; color: #52305e; margin-top: 1px; }
     .rj-org a {
-      color: #8c3060;
+      color: #8c2050;
       text-decoration: underline;
       text-underline-offset: 2px;
       font-style: normal;
+      font-weight: 600;
     }
-    .rj-date  { font-size:9.5pt; color:#786080; white-space:nowrap; flex-shrink:0; }
+    .rj-date  { font-size: 9.5pt; color: #786080; white-space: nowrap; flex-shrink: 0; }
 
     /* ── Lists ──────────────────────────────────────────── */
-    .rl  { margin:5px 0 0 15px; padding:0; }
-    .rl li { margin-bottom:4px; line-height:1.47; font-size:10pt; color:#1e1e1e; }
-    .ra  { margin:0 0 0 15px; padding:0; }
-    .ra li { margin-bottom:4px; font-size:10pt; line-height:1.47; color:#1e1e1e; }
+    .rl  { margin: 5px 0 0 15px; padding: 0; }
+    .rl li { margin-bottom: 4px; line-height: 1.47; font-size: 10pt; color: #1e1e1e; }
+    .ra  { margin: 0 0 0 15px; padding: 0; }
+    .ra li { margin-bottom: 4px; font-size: 10pt; line-height: 1.47; color: #1e1e1e; }
 
     /* ── Skills ─────────────────────────────────────────── */
-    .rsk-row { margin-bottom:5px; font-size:10pt; line-height:1.52; }
-    .rsk-row strong { color:#1a0f1e; }
+    .rsk-row { margin-bottom: 5px; font-size: 10pt; line-height: 1.52; }
+    .rsk-row strong { color: #1a0f1e; }
 
     /* ── Summary ─────────────────────────────────────────── */
-    .r-summary { font-size:10pt; line-height:1.54; color:#1e1e1e; text-align:justify; }
+    .r-summary { font-size: 10pt; line-height: 1.54; color: #1e1e1e; text-align: justify; }
 
-    /* ── PRINT ──────────────────────────────────────────────
-       @page margin:0  means the browser adds zero extra space.
-       The .resume padding IS the margin. Links stay underlined
-       and coloured so they are visually clickable in PDF.
-    ─────────────────────────────────────────────────────── */
-    @page { size:letter; margin:0; }
+    /* ════════════════════════════════════════════════════════
+       PRINT RULES
+       @page margin:0  →  .resume padding handles ALL spacing.
+       Links stay dark rose + underline so they're obvious.
+       a[href]::after:none  →  suppresses raw URL printing.
+    ════════════════════════════════════════════════════════ */
+    @page { size: letter; margin: 0; }
 
     @media print {
-      html, body { background:#fff !important; padding:0 !important; margin:0 !important; }
-      .controls  { display:none !important; }
-      .page-shell { max-width:none; box-shadow:none; border-radius:0; }
-      .resume { padding:96px 108px; width:100%; font-size:10.5pt; line-height:1.47; }
+      html, body { background: #fff !important; padding: 0 !important; margin: 0 !important; }
+      .controls  { display: none !important; }
+      .page-shell { max-width: none; box-shadow: none; border-radius: 0; }
+      .resume { padding: 88px 100px; width: 100%; }
 
-      /* Keep links underlined and coloured in PDF */
-      a { color:#8c3060 !important; text-decoration:underline !important; text-underline-offset:2px !important; }
-      /* Stop browser from printing the raw URL after each link */
-      a[href]::after { content:none !important; }
+      /* Ensure links are visible and clickable in saved PDF */
+      a {
+        color: #8c2050 !important;
+        text-decoration: underline !important;
+        text-underline-offset: 2px !important;
+      }
+      /* Suppress Chrome's "URL after link" behaviour */
+      a[href]::after { content: none !important; }
     }
   </style>
 </head>
 <body>
 
+<!-- CONTROLS — hidden on print -->
 <div class="controls">
   <h1>Resume — Blessing Omoregie</h1>
   <div class="notice">
-    <strong>Save as PDF with fully clickable links:</strong>
+    <strong>To save as PDF with fully clickable links:</strong>
     <ol>
-      <li>Click <strong>Print / Save as PDF</strong> (or press Ctrl+P / Cmd+P)</li>
-      <li>Set <em>Destination</em> → <strong>Save as PDF</strong></li>
-      <li>Set <em>Margins</em> → <strong>None</strong> (this file manages its own generous 1-inch margins internally)</li>
-      <li>Save — all links (email, LinkedIn, GitHub, portfolio, Medium) are real clickable hyperlinks in the PDF.</li>
+      <li>Click <strong>Print / Save as PDF</strong> (or Ctrl+P / Cmd+P)</li>
+      <li>Destination → <strong>Save as PDF</strong></li>
+      <li>Margins → <strong>None</strong> &nbsp;(this file manages its own ~1-inch margins)</li>
+      <li>Click Save — open the PDF in <strong>Adobe Reader</strong> or <strong>Chrome</strong> to use clickable links. Some basic viewers (Preview on Mac, Windows Edge basic mode) do not render PDF link annotations.</li>
     </ol>
   </div>
   <div class="btn-row">
     <button class="btn-print" onclick="window.print()">Print / Save as PDF</button>
-    <button class="btn-tip" onclick="alert('In the print dialog:\n• Margins → None\n• Destination → Save as PDF\n\nThe file provides its own 1-inch margins.')">Tips</button>
+    <button class="btn-tip" onclick="alert('Margins must be set to None in the print dialog.\n\nOpen the saved PDF in Chrome or Adobe Reader for clickable links.')">Tips</button>
   </div>
 </div>
 
+<!-- RESUME DOCUMENT -->
 <div class="page-shell">
 <div class="resume">
 
@@ -169,16 +206,26 @@
   <div class="rh">
     <div class="rh-name">BLESSING OMOREGIE</div>
     <div class="rh-role">DevOps Engineer &nbsp;&bull;&nbsp; Quantitative Trading Developer</div>
-    <div class="rh-links">
+
+    <!-- Row 1: email | phone | LinkedIn | GitHub -->
+    <div class="rh-contacts">
       <a href="mailto:omoregieblessing52@gmail.com">omoregieblessing52@gmail.com</a>
-      <span class="sep">|</span>+234 812 302 7408<span class="sep">|</span>
-      <a href="https://linkedin.com/in/nixie001" target="_blank">linkedin.com/in/nixie001</a>
-      <br>
-      <a href="https://github.com/nixiestone" target="_blank">github.com/nixiestone</a>
       <span class="sep">|</span>
-      <a href="https://nixiestone.github.io/portfolio" target="_blank">nixiestone.github.io/portfolio</a>
+      +234 812 302 7408
       <span class="sep">|</span>
-      <a href="https://medium.com/@NixieB" target="_blank">medium.com/@NixieB</a>
+      <a href="https://linkedin.com/in/nixie001">linkedin.com/in/nixie001</a>
+      <span class="sep">|</span>
+      <a href="https://github.com/nixiestone">github.com/nixiestone</a>
+    </div>
+
+    <!-- Row 2: Portfolio — own line, bold, prominent -->
+    <div class="rh-portfolio">
+      Portfolio: <a href="https://nixiestone.github.io/portfolio">nixiestone.github.io/portfolio</a>
+    </div>
+
+    <!-- Row 3: Blog -->
+    <div class="rh-blog">
+      Blog: <a href="https://medium.com/@NixieB">medium.com/@NixieB</a>
     </div>
   </div>
 
@@ -250,7 +297,7 @@
       <div class="rj-row">
         <div class="rj-left">
           <div class="rj-title">Gradific CI/CD &amp; Monitoring Platform</div>
-          <div class="rj-org">DevOps &amp; Cloud Infrastructure &mdash; <a href="https://github.com/Nixiestone/Prograde-Frontend" target="_blank">github.com/Nixiestone/Prograde-Frontend</a></div>
+          <div class="rj-org">DevOps &amp; Cloud Infrastructure &mdash; <a href="https://github.com/Nixiestone/Prograde-Frontend">github.com/Nixiestone/Prograde-Frontend</a></div>
         </div>
         <div class="rj-date">Apr – Aug 2025</div>
       </div>
@@ -266,7 +313,7 @@
       <div class="rj-row">
         <div class="rj-left">
           <div class="rj-title">Nixie's Gold Trading Bot (XAU/USD)</div>
-          <div class="rj-org">Personal Project — Quantitative Trading &mdash; <a href="https://github.com/nixiestone/nixie-gold-bot" target="_blank">github.com/nixiestone/nixie-gold-bot</a></div>
+          <div class="rj-org">Personal Project — Quantitative Trading &mdash; <a href="https://github.com/nixiestone/nixie-gold-bot">github.com/nixiestone/nixie-gold-bot</a></div>
         </div>
         <div class="rj-date">Nov 2024 – Present</div>
       </div>
@@ -282,7 +329,7 @@
       <div class="rj-row">
         <div class="rj-left">
           <div class="rj-title">Container Isolation System</div>
-          <div class="rj-org">Personal Project — Systems Engineering &mdash; <a href="https://github.com/Nixiestone/container-isolation-project" target="_blank">github.com/Nixiestone/container-isolation-project</a></div>
+          <div class="rj-org">Personal Project — Systems Engineering &mdash; <a href="https://github.com/Nixiestone/container-isolation-project">github.com/Nixiestone/container-isolation-project</a></div>
         </div>
         <div class="rj-date">December 2025</div>
       </div>
@@ -297,7 +344,7 @@
       <div class="rj-row">
         <div class="rj-left">
           <div class="rj-title">DORA Metrics Monitoring System</div>
-          <div class="rj-org">HNG Tech — DevOps &amp; Observability &mdash; <a href="https://github.com/Nixiestone/dora-metrics" target="_blank">github.com/Nixiestone/dora-metrics</a></div>
+          <div class="rj-org">HNG Tech — DevOps &amp; Observability &mdash; <a href="https://github.com/Nixiestone/dora-metrics">github.com/Nixiestone/dora-metrics</a></div>
         </div>
         <div class="rj-date">March 2025</div>
       </div>
@@ -311,7 +358,7 @@
       <div class="rj-row">
         <div class="rj-left">
           <div class="rj-title">FastAPI Microservices Platform</div>
-          <div class="rj-org">HNG Tech — DevOps &amp; Cloud &mdash; <a href="https://github.com/Nixiestone/DevOps-Stage-4" target="_blank">github.com/Nixiestone/DevOps-Stage-4</a></div>
+          <div class="rj-org">HNG Tech — DevOps &amp; Cloud &mdash; <a href="https://github.com/Nixiestone/DevOps-Stage-4">github.com/Nixiestone/DevOps-Stage-4</a></div>
         </div>
         <div class="rj-date">Jan – Apr 2025</div>
       </div>
@@ -345,7 +392,7 @@
     </div>
   </div>
 
-  <!-- ACHIEVEMENTS -->
+  <!-- KEY ACHIEVEMENTS -->
   <div class="rs">
     <div class="rs-title">Key Achievements</div>
     <ul class="ra">
@@ -359,7 +406,8 @@
     </ul>
   </div>
 
-</div>
-</div>
+</div><!-- /.resume -->
+</div><!-- /.page-shell -->
+
 </body>
 </html>
